@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>درگاه امن پردازش داده کافه‌پرشین | نسخه حرفه‌ای</title>
-    <meta name="description" content="ابزار امنیتی و حرفه‌ای برای مبهم‌سازی و رمزگشایی متن و لینک با رابط کاربری فوق مدرن.">
-    <meta name="keywords" content="مبهم‌سازی, رمزگشایی, امنیت, Base64, کانفیگ, ابزار توسعه, کافه‌پرشین">
+    <title>درگاه جامع امنیت و ابزارهای کافه‌پرشین</title>
+    <meta name="description" content="مجموعه ابزارهای امنیتی: رمزنگاری Base64، تولید رمز عبور، UUID و کلید مخفی.">
     <meta name="author" content="CafePersians | TechForAll1373">
     
     <!-- فونت وزیرمتن -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
 
     <style>
-        /* --- متغیرهای رنگی و تم‌ها (پیشرفته) --- */
+        /* --- متغیرهای رنگی و تم‌ها (کامل ۷ تم) --- */
         :root {
             --bg-deep: #020204;
             --bg-surface: rgba(25, 25, 30, 0.6);
@@ -27,10 +26,11 @@
             
             --font-family: 'Vazirmatn', sans-serif;
             --radius: 24px;
-            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* نکته: ترنزیشن روی all حذف شد تا فونت سریع تغییر کند */
+            --transition: background 0.3s, transform 0.3s, box-shadow 0.3s, border-color 0.3s;
         }
 
-        /* تم‌های سایبری قدرتمند */
+        /* تعریف ۷ تم کامل */
         [data-theme="cyber-blue"] { --primary: #00e5ff; --primary-glow: rgba(0, 229, 255, 0.4); --bg-gradient: radial-gradient(circle at 10% 20%, rgba(0, 229, 255, 0.08) 0%, #020204 60%); }
         [data-theme="cyber-green"] { --primary: #00ff9d; --primary-glow: rgba(0, 255, 157, 0.4); --bg-gradient: radial-gradient(circle at 10% 20%, rgba(0, 255, 157, 0.08) 0%, #020204 60%); }
         [data-theme="cyber-purple"] { --primary: #d500f9; --primary-glow: rgba(213, 0, 249, 0.4); --bg-gradient: radial-gradient(circle at 10% 20%, rgba(213, 0, 249, 0.08) 0%, #020204 60%); }
@@ -52,24 +52,24 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            font-size: 16px;
+            font-size: 16px; /* سایز پیش‌فرض */
+            /* حذف ترنزیشن از font-size برای سرعت */
+            transition: background-color 0.5s;
         }
 
-        /* اسکرول بار شیشه‌ای */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-deep); }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-        /* --- هدر شیشه‌ای --- */
+        /* --- هدر --- */
         header {
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            background: rgba(2, 2, 4, 0.8);
+            background: rgba(2, 2, 4, 0.9);
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
@@ -78,7 +78,7 @@
         }
 
         .logo {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 900;
             background: linear-gradient(135deg, #fff, var(--primary));
             -webkit-background-clip: text;
@@ -86,152 +86,166 @@
             text-shadow: 0 0 20px var(--primary-glow);
         }
 
-        .controls { display: flex; gap: 10px; }
-
+        .controls { display: flex; gap: 8px; }
         .icon-btn {
             background: rgba(255,255,255,0.05);
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
+            width: 36px; height: 36px;
+            border-radius: 10px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
             transition: var(--transition);
         }
-
         .icon-btn:hover {
-            background: var(--primary);
-            color: #000;
-            border-color: var(--primary);
-            transform: translateY(-3px);
+            background: var(--primary); color: #000;
+            transform: translateY(-2px);
             box-shadow: 0 5px 15px var(--primary-glow);
         }
 
         /* --- محتوای اصلی --- */
-        main {
-            flex: 1;
-            width: 100%;
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 2.5rem 1rem;
-        }
+        main { flex: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem; }
 
         .glass-card {
             background: var(--bg-surface);
             backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            padding: 3rem;
-            margin-bottom: 3rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             position: relative;
             overflow: hidden;
-            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            animation: fadeIn 0.5s ease;
         }
-        
-        /* افکت نور پس‌زمینه کارت */
-        .glass-card::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0.5;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- کارت گیت‌هاب حرفه‌ای (Digital ID Style) --- */
-        .github-hero {
-            background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
-            border: 1px solid var(--primary);
-            box-shadow: 0 0 30px var(--primary-glow), inset 0 0 20px rgba(255,255,255,0.02);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            color: #fff;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .github-hero:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 15px 50px var(--primary-glow), inset 0 0 30px rgba(255,255,255,0.05);
-            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
-        }
-
-        .gh-content h3 { color: var(--primary); font-size: 1.4rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; font-weight: 800; }
-        .gh-content p { color: var(--text-muted); font-size: 0.95rem; letter-spacing: 0.5px; }
-        .gh-icon { font-size: 3rem; filter: drop-shadow(0 0 10px var(--primary)); transition: transform 0.5s ease; }
-        .github-hero:hover .gh-icon { transform: rotate(-10deg) scale(1.1); }
-
-        /* --- ابزار اصلی --- */
-        .tabs-wrapper {
-            display: flex;
+        /* --- ناوبری ابزارها (Tabs) --- */
+        .tools-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 2rem;
             background: rgba(0,0,0,0.3);
-            padding: 6px;
+            padding: 8px;
             border-radius: 16px;
-            margin-bottom: 2.5rem;
             border: 1px solid var(--border-color);
         }
 
-        .tab-btn {
-            flex: 1;
-            padding: 14px;
+        .nav-btn {
             background: transparent;
             border: none;
             color: var(--text-muted);
             font-family: var(--font-family);
             font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 12px 5px;
             border-radius: 12px;
+            cursor: pointer;
             transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
-
-        .tab-btn.active { 
+        .nav-btn span { font-size: 1.4rem; }
+        .nav-btn.active { 
             background: var(--primary); 
             color: #000; 
             box-shadow: 0 0 20px var(--primary-glow);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        .input-group { margin-bottom: 2rem; }
-        label { display: block; margin-bottom: 0.8rem; color: var(--primary); font-size: 0.9rem; font-weight: 700; letter-spacing: 0.5px; }
+        /* --- پنل‌های ابزار --- */
+        .tool-panel { display: none; }
+        .tool-panel.active { display: block; animation: fadeIn 0.4s ease; }
 
-        textarea {
+        /* --- استایل‌های فرم --- */
+        label { display: block; margin-bottom: 0.5rem; color: var(--primary); font-size: 0.9rem; font-weight: 700; }
+        
+        .input-wrapper { position: relative; }
+        
+        textarea, input[type="text"] {
             width: 100%;
-            height: 160px;
             background: rgba(0,0,0,0.4);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 1.2rem;
+            padding: 1rem;
+            padding-left: 3.5rem; /* فضای خالی برای دکمه کپی */
             color: var(--text-main);
             font-family: 'Vazirmatn', monospace;
             font-size: 0.95rem;
-            line-height: 1.7;
             resize: vertical;
             transition: var(--transition);
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.3);
         }
-
-        textarea:focus { 
+        textarea { height: 120px; line-height: 1.6; }
+        input[type="text"]:focus, textarea:focus {
             border-color: var(--primary); 
-            box-shadow: 0 0 0 2px var(--primary-glow), inset 0 2px 10px rgba(0,0,0,0.5); 
+            box-shadow: 0 0 0 2px var(--primary-glow); 
             background: rgba(0,0,0,0.6); 
         }
 
-        .action-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        /* --- دکمه‌های شناور کنار اینپوت --- */
+        .input-actions {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 5px;
+        }
+        .action-icon-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--text-muted);
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        .action-icon-btn:hover { color: #fff; background: var(--primary); color: #000; }
 
+        /* --- باکس نتیجه برای ژنراتورها --- */
+        .result-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .result-display {
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px dashed var(--primary);
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 1.2rem;
+            padding-left: 3.5rem;
+            border-radius: 16px;
+            word-break: break-all;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        .copy-overlay-btn {
+            position: absolute;
+            left: 10px; top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            border: none;
+            color: #000;
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--transition);
+        }
+        .copy-overlay-btn:hover { transform: translateY(-50%) scale(1.1); box-shadow: 0 0 15px var(--primary); }
+
+        /* --- دکمه‌های اکشن اصلی --- */
         .btn {
+            width: 100%;
             padding: 1rem;
             border: none;
             border-radius: 14px;
@@ -240,219 +254,133 @@
             font-size: 1rem;
             cursor: pointer;
             transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             background: var(--primary);
             color: #000;
-            flex: 2;
             box-shadow: 0 4px 20px var(--primary-glow);
-            position: relative;
-            overflow: hidden;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 30px var(--primary-glow); }
+
+        /* --- تنظیمات اسلایدر و چک‌باکس --- */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            background: rgba(255,255,255,0.02);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .setting-item { display: flex; flex-direction: column; gap: 8px; }
+        
+        input[type=range] {
+            -webkit-appearance: none; width: 100%; background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px; width: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; cursor: pointer;
+            background: rgba(255,255,255,0.1); border-radius: 2px;
         }
         
-        .btn-primary::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: 0.5s;
+        .checkbox-wrapper { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+        .custom-checkbox {
+            width: 22px; height: 22px;
+            border: 2px solid var(--text-muted);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--transition);
         }
-        .btn-primary:hover::before { left: 100%; }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px var(--primary-glow); }
-        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; filter: grayscale(1); }
+        input[type="checkbox"], input[type="radio"] { display: none; }
+        input[type="checkbox"]:checked + .custom-checkbox,
+        input[type="radio"]:checked + .custom-checkbox {
+            background: var(--primary); border-color: var(--primary);
+            color: #000;
+        }
 
-        .btn-secondary {
-            background: rgba(255,255,255,0.05);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            flex: 1;
-        }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
-
-        .tools-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px; }
-        .mini-btn {
-            background: transparent; border: none; color: var(--text-muted);
-            padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: var(--transition); font-weight: 600;
-        }
-        .mini-btn:hover { color: var(--primary); background: rgba(255,255,255,0.05); }
-
-        /* --- چیدمان لینک‌ها (فوق تخصصی و مدرن) --- */
-        .section-header {
-            text-align: center; margin-bottom: 2.5rem; position: relative;
-        }
-        .section-header h2 {
-            color: var(--primary); font-size: 1.8rem; margin-bottom: 0.5rem; 
-            text-shadow: 0 0 25px var(--primary-glow); font-weight: 900; letter-spacing: -0.5px;
-        }
-        .section-header::after {
-            content: ''; display: block; width: 50px; height: 3px; background: var(--primary);
-            margin: 10px auto 0; border-radius: 2px; box-shadow: 0 0 10px var(--primary);
-        }
+        /* --- لینک‌ها (کامل بازگردانی شده) --- */
+        .section-header { text-align: center; margin-bottom: 1.5rem; }
+        .section-header h2 { color: var(--primary); font-size: 1.5rem; text-shadow: 0 0 15px var(--primary-glow); }
 
         .links-grid {
-            display: grid;
-            /* گرید ریسپانسیو پیشرفته */
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 2rem;
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 10px; 
+            margin-bottom: 1rem;
         }
-
         .link-card {
-            /* استایل شیشه‌ای و براق */
-            background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            background: rgba(255,255,255,0.03); 
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.2rem;
+            border-radius: 12px; 
+            padding: 10px; 
+            text-align: center; 
             text-decoration: none;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            color: var(--text-muted); 
+            font-size: 0.85rem; 
             transition: var(--transition);
-            font-weight: 600;
-            font-size: 0.95rem;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-
-        /* براق‌سازی (Sheen) */
-        .link-card::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: skewX(-20deg);
-            transition: 0.5s;
-        }
-
-        .link-card:hover {
-            color: #000;
-            background: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 10px 25px var(--primary-glow);
-            z-index: 2;
-        }
-        
-        .link-card:hover::after { left: 150%; }
-
-        .link-icon { font-size: 1.3rem; transition: transform 0.4s; filter: drop-shadow(0 0 2px rgba(0,0,0,0.3)); }
-        .link-card:hover .link-icon { transform: scale(1.2) rotate(5deg); }
-
-        /* استایل ویژه */
-        .link-card.special { 
-            border-color: rgba(255, 215, 0, 0.4); 
-            color: #ffd700; 
-            background: linear-gradient(145deg, rgba(255, 215, 0, 0.05) 0%, rgba(0,0,0,0) 100%);
-        }
-        .link-card.special:hover { 
-            background: #ffd700; 
-            border-color: #ffd700; 
+        .link-card:hover { 
+            background: var(--primary); 
             color: #000; 
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+            transform: translateY(-3px); 
+            box-shadow: 0 5px 15px var(--primary-glow);
+        }
+        .link-card.special {
+            border-color: rgba(255, 215, 0, 0.4);
+            color: #ffd700;
+        }
+        .link-card.special:hover {
+            background: #ffd700; color: #000;
         }
 
-        /* --- فوتر --- */
-        footer { 
-            text-align: center; padding: 3rem 1rem; 
-            border-top: 1px solid var(--border-color); 
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); margin-top: auto; 
-        }
-        
-        .footer-text { color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; font-weight: 500; }
-        .love { color: #ff1744; animation: beat 1.5s infinite; display: inline-block; font-size: 1.2em; margin: 0 5px; }
-        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-
-        /* --- Toast --- */
+        /* --- Toast & Footer --- */
         #toast {
             visibility: hidden; min-width: 300px; background: rgba(10, 10, 10, 0.95); color: #fff;
-            text-align: center; border-radius: 50px; padding: 14px 25px; position: fixed; z-index: 2000;
+            text-align: center; border-radius: 50px; padding: 12px 20px; position: fixed; z-index: 2000;
             left: 50%; bottom: 30px; transform: translateX(-50%) translateY(20px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.7), 0 0 20px var(--primary-glow);
-            border: 1px solid var(--primary); opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            font-weight: 700; backdrop-filter: blur(10px);
+            border: 1px solid var(--primary); opacity: 0; transition: all 0.2s; font-weight: 700;
         }
         #toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        @media (max-width: 600px) {
-            .github-hero { flex-direction: column; text-align: center; gap: 1.5rem; padding: 1.5rem; }
-            .links-grid { grid-template-columns: 1fr; } /* موبایل: ستون واحد برای تمرکز */
+        footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.5); margin-top: auto; }
+
+        @media (max-width: 768px) {
+            .tools-nav { grid-template-columns: 1fr 1fr; }
+            .nav-btn { flex-direction: row; justify-content: center; }
+            .links-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">⚡ امن‌ساز کافه‌پرشین</div>
+        <div class="logo">⚡ ابزارهای امنیتی کافه‌پرشین</div>
         <div class="controls">
             <button class="icon-btn" onclick="toggleTheme()" title="تغییر تم">🎨</button>
-            <button class="icon-btn" onclick="adjustFont(-1)" title="کوچک‌نمایی">A-</button>
-            <button class="icon-btn" onclick="adjustFont(1)" title="بزرگ‌نمایی">A+</button>
+            <button class="icon-btn" onclick="adjustFont(-1)" title="کوچک">A-</button>
+            <button class="icon-btn" onclick="adjustFont(1)" title="بزرگ">A+</button>
         </div>
     </header>
 
     <main>
-        <!-- بخش گیت‌هاب (Digital ID Card) -->
-        <a href="https://github.com/TechForAll1373" target="_blank" class="github-hero">
-            <div class="gh-content">
-                <h3>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    مخزن رسمی گیت‌هاب
-                </h3>
-                <p>دسترسی به پروژه‌های امنیتی و سورس‌کدهای توسعه‌دهنده</p>
-            </div>
-            <div class="gh-icon">🚀</div>
-        </a>
-
-        <div class="glass-card">
-            <div class="tabs-wrapper">
-                <button class="tab-btn active" id="tab-enc" onclick="setMode('encode')">🔒 مبهم‌سازی</button>
-                <button class="tab-btn" id="tab-dec" onclick="setMode('decode')">🔓 رمزگشایی</button>
-            </div>
-
-            <div class="input-group">
-                <label for="inputData">ورودی اطلاعات:</label>
-                <textarea id="inputData" placeholder="متن، لینک یا کانفیگ خود را وارد کنید..." autocomplete="off"></textarea>
-                <div class="tools-row">
-                    <button class="mini-btn" onclick="pasteFromClipboard()">📋 جای‌گذاری</button>
-                    <button class="mini-btn" onclick="document.getElementById('inputData').value=''">🗑️ پاک‌سازی</button>
-                </div>
-            </div>
-
-            <div class="action-row">
-                <button class="btn btn-primary" id="processBtn" onclick="processAction()">
-                    <span id="btnIcon">⚡</span>
-                    <span id="btnText">اجرا کنید</span>
-                </button>
-            </div>
-
-            <div class="input-group" style="margin-top: 2.5rem;">
-                <label for="outputData">خروجی نهایی:</label>
-                <textarea id="outputData" readonly placeholder="نتیجه در اینجا نمایش داده می‌شود..." autocomplete="off"></textarea>
-                <div class="tools-row">
-                    <button class="mini-btn" onclick="swapData()">🔄 جابجایی</button>
-                    <button class="mini-btn" onclick="copyResult()">📋 کپی نتیجه</button>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: var(--text-muted); opacity: 0.6; letter-spacing: 0.5px;">
-                🔒 پردازش کاملاً امن، سریع و محلی است | هیچ اطلاعاتی ذخیره نمی‌شود
-            </div>
-        </div>
-
-        <div class="glass-card">
+        <!-- بخش لینک‌ها (بازگردانی کامل تمام لینک‌ها) -->
+        <div class="glass-card" style="padding: 1.5rem;">
             <div class="section-header">
-                <h2>❄️ شبکه حامیان</h2>
+                <h2>☕ کافه پارسیان کافه مجازی ایرانیان</h2>
             </div>
-            <!-- چیدمان فوق مدرن -->
             <div class="links-grid">
                 <a href="https://takl.ink/cafepersians/" target="_blank" class="link-card">❄️ کافه‌پرشین</a>
                 <a href="http://www.coffeete.ir/Cafepersians" target="_blank" class="link-card">☕ قهوه نت</a>
-                <!-- اصلاح شده: حامی باش -->
                 <a href="https://hamibash.com/cafepersians" target="_blank" class="link-card">حامی باش</a>
                 <a href="https://taw-bio.ir/f/bio/ca/cafepersians" target="_blank" class="link-card">🔗 تایو بیو</a>
                 <a href="https://arena.social/?ref=termuxisland" target="_blank" class="link-card">🏟️ آرنا سوشال</a>
@@ -460,7 +388,6 @@
                 <a href="https://takl.ink/HamNava/" target="_blank" class="link-card">🚀 هم‌نوا</a>
                 <a href="https://takl.ink/Workstation/" target="_blank" class="link-card">💻 ورک‌استیشن</a>
                 <a href="https://takl.ink/Charisman/" target="_blank" class="link-card">👔 کاریزما</a>
-                <!-- اصلاح شده: ازکی سلر -->
                 <a href="https://takl.ink/azkiSeller/" target="_blank" class="link-card">ازکی سلر</a>
                 <a href="https://takl.ink/Cafepersian/" target="_blank" class="link-card">☕ کافه‌پرشین</a>
                 <a href="https://takl.ink/CafePersia/" target="_blank" class="link-card">☕ کافه‌پرشیا</a>
@@ -472,148 +399,406 @@
                 <a href="http://kh45.co/hdpW8" target="_blank" class="link-card special">🚗 خودرو ۴۵</a>
             </div>
         </div>
+
+        <!-- کارت اصلی ابزارها -->
+        <div class="glass-card">
+            <!-- منوی ناوبری -->
+            <nav class="tools-nav">
+                <button class="nav-btn active" onclick="switchTool('encoder')"><span>🔒</span> رمزنگاری</button>
+                <button class="nav-btn" onclick="switchTool('password')"><span>🛡️</span> پسورد</button>
+                <button class="nav-btn" onclick="switchTool('uuid')"><span>🆔</span> UUID</button>
+                <button class="nav-btn" onclick="switchTool('secret')"><span>🔑</span> کلید مخفی</button>
+            </nav>
+
+            <!-- 1. ابزار رمزنگاری (Base64) -->
+            <div id="tool-encoder" class="tool-panel active">
+                <div class="tabs-wrapper" style="display:flex; gap:10px; margin-bottom:1.5rem;">
+                    <button class="btn" id="enc-mode" style="flex:1; background:var(--primary); color:#000;" onclick="setEncoderMode('encode')">مبهم‌سازی</button>
+                    <button class="btn" id="dec-mode" style="flex:1; background:transparent; border:1px solid var(--border-color); color:var(--text-main);" onclick="setEncoderMode('decode')">رمزگشایی</button>
+                </div>
+
+                <div class="input-group">
+                    <label>ورودی:</label>
+                    <div class="input-wrapper">
+                        <textarea id="enc-input" placeholder="متن یا لینک را اینجا وارد کنید..."></textarea>
+                        <div class="input-actions">
+                            <button class="action-icon-btn" onclick="pasteToInput('enc-input')" title="جای‌گذاری">📋</button>
+                            <button class="action-icon-btn" onclick="clearInput('enc-input')" title="پاک‌سازی">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="processEncoder()">
+                    <span>⚡</span> اجرا
+                </button>
+
+                <div class="result-box" style="margin-top: 2rem;">
+                    <label>خروجی:</label>
+                    <div class="input-wrapper">
+                        <textarea id="enc-output" readonly placeholder="نتیجه اینجا نمایش داده می‌شود..." style="height: 100px; background: rgba(0,0,0,0.2); color: var(--primary);"></textarea>
+                        <div class="input-actions">
+                            <button class="action-icon-btn" onclick="copyToClipboard('enc-output')" title="کپی">📋</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. ابزار تولید پسورد (Password Generator) -->
+            <div id="tool-password" class="tool-panel">
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label>طول رمز: <span id="pass-len-val" style="color:#fff">16</span></label>
+                        <input type="range" id="pass-len" min="6" max="64" value="16" oninput="document.getElementById('pass-len-val').innerText = this.value">
+                    </div>
+                </div>
+
+                <div class="settings-grid">
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="chk-upper" checked>
+                        <div class="custom-checkbox">✓</div>
+                        <span>حروف بزرگ (A-Z)</span>
+                    </label>
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="chk-lower" checked>
+                        <div class="custom-checkbox">✓</div>
+                        <span>حروف کوچک (a-z)</span>
+                    </label>
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="chk-num" checked>
+                        <div class="custom-checkbox">✓</div>
+                        <span>اعداد (0-9)</span>
+                    </label>
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="chk-sym" checked>
+                        <div class="custom-checkbox">✓</div>
+                        <span>نمادها (!@#$)</span>
+                    </label>
+                </div>
+
+                <div class="result-box">
+                    <div id="pass-result" class="result-display">...</div>
+                    <button class="copy-overlay-btn" onclick="copyText('pass-result')">📋</button>
+                </div>
+
+                <button class="btn" onclick="generatePassword()">
+                    <span>🛡️</span> تولید رمز جدید
+                </button>
+            </div>
+
+            <!-- 3. ابزار UUID Generator -->
+            <div id="tool-uuid" class="tool-panel">
+                <div style="text-align: center; margin-bottom: 2rem; color: var(--text-muted);">
+                    <p>تولید شناسه منحصر به فرد نسخه ۴ (Random)</p>
+                </div>
+
+                <div class="result-box">
+                    <div id="uuid-result" class="result-display" style="justify-content: center; font-size: 1rem;">...</div>
+                    <button class="copy-overlay-btn" onclick="copyText('uuid-result')">📋</button>
+                </div>
+
+                <button class="btn" onclick="generateUUID()">
+                    <span>🆔</span> تولید UUID جدید
+                </button>
+            </div>
+
+            <!-- 4. ابزار Secret Key Generator -->
+            <div id="tool-secret" class="tool-panel">
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label>طول کلید (بایت): <span id="key-len-val" style="color:#fff">32</span></label>
+                        <input type="range" id="key-len" min="16" max="128" value="32" step="16" oninput="document.getElementById('key-len-val').innerText = this.value">
+                    </div>
+                    <div class="setting-item">
+                        <label>فرمت خروجی:</label>
+                        <div style="display: flex; gap: 10px; margin-top: 5px;">
+                            <label class="checkbox-wrapper">
+                                <input type="radio" name="key-format" value="hex" checked>
+                                <div class="custom-checkbox" style="border-radius:50%;">H</div>
+                                <span>Hex</span>
+                            </label>
+                            <label class="checkbox-wrapper">
+                                <input type="radio" name="key-format" value="base64">
+                                <div class="custom-checkbox" style="border-radius:50%;">B</div>
+                                <span>Base64</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-box">
+                    <div id="secret-result" class="result-display">...</div>
+                    <button class="copy-overlay-btn" onclick="copyText('secret-result')">📋</button>
+                </div>
+
+                <button class="btn" onclick="generateSecretKey()">
+                    <span>🔑</span> تولید کلید مخفی
+                </button>
+            </div>
+
+        </div>
     </main>
 
     <footer>
-        <p class="footer-text">توسعه یافته توسط تیم فنی کافه‌پرشین</p>
-        <br>
-        <p class="footer-text">ساخته شده با عشق و علاقه‌ای بی‌نهایت برای خدمت به شما <span class="love">❤️</span></p>
+        <p>توسعه یافته توسط تیم فنی کافه‌پرشین | ساخته شده با ❤️</p>
     </footer>
 
     <div id="toast">پیام سیستم</div>
 
     <script>
-        let currentMode = 'encode';
+        // --- مدیریت تم‌ها (7 تم کامل) ---
         const themes = ['cyber-blue', 'cyber-green', 'cyber-purple', 'cyber-orange', 'cyber-red', 'cyber-gold', 'cyber-matrix'];
         let currentThemeIndex = 0;
-
-        // --- توابع رمزنگاری (بهینه و بدون باگ) ---
-        function utf8_to_b64(str) {
-            try {
-                return window.btoa(unescape(encodeURIComponent(str)));
-            } catch (e) {
-                showToast("❌ خطا: داده‌های ورودی نامعتبر هستند.");
-                return null;
-            }
-        }
-
-        function b64_to_utf8(str) {
-            try {
-                // حذف تمام فاصله‌ها، تب‌ها و خطوط جدید برای اطمینان از رمزگشایی صحیح
-                str = str.replace(/[\r\n\t\s]+/g, '');
-                return decodeURIComponent(escape(window.atob(str)));
-            } catch (e) {
-                showToast("❌ خطا: کد وارد شده صحیح نیست.");
-                return null;
-            }
-        }
-
-        // --- مدیریت رابط کاربری ---
-        function setMode(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(mode === 'encode' ? 'tab-enc' : 'tab-dec').classList.add('active');
-
-            const btnText = document.getElementById('btnText');
-            const btnIcon = document.getElementById('btnIcon');
-            const input = document.getElementById('inputData');
-            const output = document.getElementById('outputData');
-
-            if (mode === 'encode') {
-                btnText.innerText = "مبهم‌سازی";
-                btnIcon.innerText = "🔒";
-                if (output.value && !input.value) { input.value = output.value; output.value = ''; }
-            } else {
-                btnText.innerText = "رمزگشایی";
-                btnIcon.innerText = "🔓";
-                if (output.value && !input.value) { input.value = output.value; output.value = ''; }
-            }
-            input.focus();
-        }
-
-        // --- پردازش سریع و امن ---
-        function processAction() {
-            const input = document.getElementById('inputData').value.trim();
-            const outputEl = document.getElementById('outputData');
-            const btn = document.getElementById('processBtn');
-
-            if (!input) { 
-                showToast("⚠️ لطفاً متنی را وارد کنید."); 
-                return; 
-            }
-
-            btn.disabled = true;
-            outputEl.value = "🔒 پردازش امن...";
-
-            setTimeout(() => {
-                let result = null;
-                if (currentMode === 'encode') {
-                    result = utf8_to_b64(input);
-                    if (result) showToast("✅ مبهم‌سازی انجام شد.");
-                } else {
-                    result = b64_to_utf8(input);
-                    if (result) showToast("✅ رمزگشایی انجام شد.");
-                }
-
-                outputEl.value = result || "";
-                btn.disabled = false;
-            }, 30);
-        }
-
-        // --- ابزارها ---
-        function copyResult() {
-            const el = document.getElementById('outputData');
-            if (!el.value) return;
-            el.select(); 
-            navigator.clipboard.writeText(el.value).then(() => showToast("📋 کپی شد!"));
-        }
-
-        async function pasteFromClipboard() {
-            try {
-                const text = await navigator.clipboard.readText();
-                document.getElementById('inputData').value = text;
-                showToast("📋 متن جای‌گذاری شد.");
-            } catch { showToast("❌ دسترسی به کلیپ‌بورد ممکن نیست."); }
-        }
-
-        function swapData() {
-            const inp = document.getElementById('inputData');
-            const out = document.getElementById('outputData');
-            const t = inp.value; inp.value = out.value; out.value = t;
-            showToast("🔄 جابجا شد.");
-        }
-
-        // --- تم و فونت ---
         function toggleTheme() {
             currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-            const t = themes[currentThemeIndex];
-            document.documentElement.setAttribute('data-theme', t);
-            showToast(`🎨 تم: ${t.replace('cyber-', '').toUpperCase()}`);
+            document.documentElement.setAttribute('data-theme', themes[currentThemeIndex]);
+            showToast(`🎨 تم تغییر کرد: ${themes[currentThemeIndex].replace('cyber-', '').toUpperCase()}`);
         }
-
+        
+        // --- تغییر سایز فونت (بدون تاخیر و بسیار سریع) ---
         function adjustFont(d) {
             const h = document.documentElement;
+            // دریافت سایز فعلی
             let s = parseFloat(window.getComputedStyle(h).fontSize);
-            s += d; if (s < 12) s = 12; if (s > 24) s = 24;
+            s += d; 
+            if (s < 12) s = 12; 
+            if (s > 26) s = 26; // محدودیت حداکثری
+            
+            // اعمال آنی
             h.style.fontSize = s + 'px';
         }
 
-        // --- سیستم اعلان ---
-        let toastTimeout;
-        function showToast(m) {
-            const toast = document.getElementById('toast');
-            toast.innerText = m; toast.classList.add('show');
-            if (toastTimeout) clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+        // --- سیستم ناوبری (Switching Tools) ---
+        function switchTool(toolId) {
+            document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tool-' + toolId).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const btn = document.querySelector(`.nav-btn[onclick="switchTool('${toolId}')"]`);
+            if(btn) btn.classList.add('active');
         }
 
-        // --- امنیت نهایی ---
-        window.addEventListener('beforeunload', () => {
-            document.getElementById('inputData').value = '';
-            document.getElementById('outputData').value = '';
-        });
+        // --- سیستم کلیپ‌بورد پیشرفته و پشتیبان (Fast & Accurate) ---
+        function copyToClipboard(elementId) {
+            const el = document.getElementById(elementId);
+            if (!el || !el.value) return showToast("⚠️ متنی برای کپی وجود ندارد");
+            copyTextInternal(el.value);
+        }
 
-        window.onload = () => setMode('encode');
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            if (!text || text === '...') return showToast("⚠️ ابتدا تولید کنید");
+            copyTextInternal(text);
+        }
+
+        function copyTextInternal(text) {
+            // روش مدرن و سریع
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("📋 کپی با موفقیت انجام شد!");
+                }).catch(err => {
+                    // اگر روش مدرن failed (مثلا در فایل local)
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed"; 
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if(successful) showToast("📋 کپی شد!");
+                else showToast("❌ کپی انجام نشد");
+            } catch (err) {
+                showToast("❌ مرورگر اجازه دسترسی نمی‌دهد");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // --- جای‌گذاری (Paste) ---
+        async function pasteToInput(elementId) {
+            const el = document.getElementById(elementId);
+            if (navigator.clipboard && window.isSecureContext) {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    el.value = text;
+                    showToast("📋 متن جای‌گذاری شد");
+                } catch (err) {
+                    showToast("❌ دسترسی به کلیپ‌بورد رد شد");
+                }
+            } else {
+                showToast("⚠️ جای‌گذاری خودکار غیرفعال است (Ctrl+V)");
+            }
+        }
+
+        // --- پاک‌سازی (Clear) ---
+        function clearInput(elementId) {
+            const el = document.getElementById(elementId);
+            el.value = '';
+            el.focus();
+            showToast("🗑️ پاکسازی شد");
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg; 
+            t.classList.add('show');
+            
+            // پاک کردن تایمر قبلی اگر وجود داشته باشد
+            if(t.timeoutId) clearTimeout(t.timeoutId);
+            
+            t.timeoutId = setTimeout(() => {
+                t.classList.remove('show');
+            }, 2500);
+        }
+
+        // --- ابزار 1: رمزنگاری (Encoder/Decoder) ---
+        let encMode = 'encode';
+        function setEncoderMode(m) {
+            encMode = m;
+            const btnEnc = document.getElementById('enc-mode');
+            const btnDec = document.getElementById('dec-mode');
+            
+            // استایل دکمه‌ها
+            const activeStyle = `background: var(--primary); color: #000;`;
+            const inactiveStyle = `background: transparent; border: 1px solid var(--border-color); color: var(--text-main);`;
+
+            if(m === 'encode') {
+                btnEnc.style.cssText = activeStyle;
+                btnDec.style.cssText = inactiveStyle;
+            } else {
+                btnDec.style.cssText = activeStyle;
+                btnEnc.style.cssText = inactiveStyle;
+            }
+            // پاکسازی برای استقلال
+            document.getElementById('enc-input').value = '';
+            document.getElementById('enc-output').value = '';
+        }
+
+        function safeBase64Encode(str) {
+            try {
+                const encoder = new TextEncoder();
+                const view = encoder.encode(str);
+                let binary = '';
+                for (let i = 0; i < view.length; i++) binary += String.fromCharCode(view[i]);
+                return window.btoa(binary);
+            } catch (e) { return null; }
+        }
+
+        function safeBase64Decode(str) {
+            try {
+                str = str.replace(/[\r\n\s]+/g, '');
+                if (str.includes(',')) str = str.split(',')[1];
+                while (str.length % 4) str += '=';
+                const binaryString = window.atob(str);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+                return new TextDecoder().decode(bytes);
+            } catch (e) { return null; }
+        }
+
+        function processEncoder() {
+            const input = document.getElementById('enc-input').value.trim();
+            const output = document.getElementById('enc-output');
+            if(!input) return showToast("⚠️ لطفا متنی وارد کنید");
+
+            let res = null;
+            if(encMode === 'encode') res = safeBase64Encode(input);
+            else res = safeBase64Decode(input);
+
+            if(res) {
+                output.value = res;
+                showToast("✅ عملیات موفق");
+            } else {
+                output.value = "❌ خطا: فرمت ورودی نامعتبر است.";
+            }
+        }
+
+        // --- ابزار 2: Password Generator ---
+        function generatePassword() {
+            const len = parseInt(document.getElementById('pass-len').value);
+            const u = document.getElementById('chk-upper').checked;
+            const l = document.getElementById('chk-lower').checked;
+            const n = document.getElementById('chk-num').checked;
+            const s = document.getElementById('chk-sym').checked;
+
+            const chars = {
+                upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                lower: "abcdefghijklmnopqrstuvwxyz",
+                num: "0123456789",
+                sym: "!@#$%^&*()_+~`|}{[]:;?><,./-="
+            };
+
+            let pool = "";
+            if(u) pool += chars.upper;
+            if(l) pool += chars.lower;
+            if(n) pool += chars.num;
+            if(s) pool += chars.sym;
+
+            if(pool === "") return showToast("⚠️ حداقل یک گزینه را انتخاب کنید");
+
+            let password = "";
+            const array = new Uint32Array(len);
+            window.crypto.getRandomValues(array);
+            
+            for(let i=0; i<len; i++) {
+                password += pool[array[i] % pool.length];
+            }
+
+            document.getElementById('pass-result').innerText = password;
+        }
+
+        // --- ابزار 3: UUID Generator ---
+        function generateUUID() {
+            if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+                document.getElementById('uuid-result').innerText = crypto.randomUUID();
+            } else {
+                // Fallback
+                document.getElementById('uuid-result').innerText = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+            showToast("✅ UUID جدید تولید شد");
+        }
+
+        // --- ابزار 4: Secret Key Generator ---
+        function generateSecretKey() {
+            const len = parseInt(document.getElementById('key-len').value);
+            const format = document.querySelector('input[name="key-format"]:checked').value;
+            
+            const array = new Uint8Array(len);
+            window.crypto.getRandomValues(array);
+
+            let result = "";
+            if (format === 'hex') {
+                result = Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+            } else {
+                // Base64
+                let binary = '';
+                for(let i=0; i<array.length; i++) binary += String.fromCharCode(array[i]);
+                result = window.btoa(binary);
+            }
+
+            document.getElementById('secret-result').innerText = result;
+            showToast("✅ کلید مخفی جدید تولید شد");
+        }
+
+        // راه‌اندازی اولیه
+        window.onload = function() {
+            generatePassword();
+            generateUUID();
+            generateSecretKey();
+        };
+
     </script>
 </body>
 </html>
